@@ -1,0 +1,36 @@
+
+years = paste(unique(SelectedData$Year), collapse = " & ")
+
+ggplot(SelectedData, aes(x = factor(Year), y = DeathRate)) +
+  geom_boxplot(outlier.colour = "red", outlier.size = 2, 
+               color = "black", alpha = 0.9, fill = "#84bc9c") +
+  
+  geom_jitter(color = "#17395c", size = 2, 
+              alpha = 0.7, width = 0.1) +
+  
+  geom_hline(aes(yintercept = mean_r1, color = "Mean 1"), 
+             linetype = "dashed", size = 1) +
+  geom_hline(aes(yintercept = mean_r2, color = "Mean 2"), 
+             linetype = "dashed", size = 1) +
+
+    scale_y_continuous(
+    limits = c(0, max(SelectedData$DeathRate, na.rm = TRUE)),
+    breaks = seq(0, max(SelectedData$DeathRate, na.rm = TRUE), length.out = 5)) +
+  
+  labs(x = "Year", y = "Cancer Death Rate", 
+    title = paste("Cancer Death Rate in the years", years),
+    color = "Mean of Years", 
+    caption = "Death Rate is age-standardized mortality rate from malignant neoplasms per 100,000 people")+
+  
+  scale_color_manual(values = c("Mean 1" = "green", "Mean 2" = "blue"),  
+    labels = c(paste("Mean 1:", round(mean_r1, 2)), 
+               paste("Mean 2:", round(mean_r2, 3))) ) +
+  
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(hjust = 1),
+    legend.position = "right", 
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(hjust = 0.5))
+
